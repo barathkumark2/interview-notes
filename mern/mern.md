@@ -110,33 +110,43 @@ export default App
 ```
 Child.tsx:
 ```typescript
-import { useReducer, useState } from "react"
+import { useReducer, type Reducer } from "react";
 
+type Action = 
+    | {type: "increment"} 
+    | {type: "decrement"}
 
+type State = {
+    count: number;
+}
 
-export const Child = () => {
+export const UseComponent: React.FC = () => {
 
-    const reducerFunction = (state, action) => {
-        switch(action.type) {
-            case "increment":
-                return state = state + 1;
-            case "decrement":
-                return state = state - 1;
-            default:
-                return state = 0;
-        }
-    }
+    const reducerFunction: Reducer<State, Action> = (state, action) => {
+      switch (action.type) {
+        case "increment":
+          return {...state, count : state.count + 1};
+        case "decrement":
+          return {...state, count: state.count - 1};
+        default:
+          return state;
+      }
+    };
 
-    const [state, dispatch] = useReducer(reducerFunction, 0);
-
-    return(
-        <div>
-            <h3>Child Component</h3>
-            <button onClick={() => dispatch({type: "increment"})}>Increment</button>
-            <button onClick={() => dispatch({type: "decrement"})}>Decrement</button>
-            <h3>{state}</h3>
-        </div>
-    )
+    const intialState: State = { count: 0 };
+    const [state, dispatch] = useReducer(reducerFunction, intialState);
+    return (
+      <div>
+        <h3>Use Component</h3>
+        <button onClick={() => dispatch({ type: "increment" })}>
+          Increment
+        </button>
+        <button onClick={() => dispatch({ type: "decrement" })}>
+          Decrement
+        </button>
+        <h3>{state.count}</h3>
+      </div>
+    );
 }
 ```
 ----------------------------------
