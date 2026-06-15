@@ -539,6 +539,60 @@ export const Child = ( ) => {
 }
 ```
 ------------
+Exercises:
+Validate phone number:
+
+```typescript
+import {useState} from "react";
+
+export const UseComponent: React.FC = () => {
+    const [number , setNumber] = useState("");
+    const [error, setError] = useState("Invalid"); 
+    const regex = /^((\+91?)|\+)?[7-9][0-9]{9}$/;
+
+    const validateNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setNumber(value);
+        if(regex.test(value)) {
+            console.log("valid");
+            setError("");
+        } else {
+            console.log("invalid");
+            setError("Invalid")
+        }
+    }
+
+    const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+         e.preventDefault();
+        const value = e.clipboardData.getData("text");
+        if (regex.test(value)) {
+          console.log("valid");
+          setNumber(value)
+          setError("");
+        } else {
+          console.log("invalid");
+          setNumber("")
+          setError("Invalid");
+        }
+    }
+
+    return (
+      <div>
+        <h3>Use Component</h3>
+        <form>
+          <h4>Validate Number</h4>
+          <input type="text" value={number} onChange={validateNumber} 
+            onPaste = {handlePaste}/>
+          {error == "Invalid" ? <p>Invalid mobile number</p>: <p>valid mobile number</p>}
+        </form>
+      </div>
+    );
+}
+
+```
+
+
+------------
 10. redux using toolkit:
 
 store.tsx
@@ -873,7 +927,7 @@ Self introduction with previous project experience
 Roles and responsibilities
 What have you done the previous which was challenging in that ?
 ------------------------------------------------------
-5. Micro frontend architecture - need to explain in details?
+### 5. Micro frontend architecture - need to explain in details?
 Micro frontend architecture is a design pattern where a large web application is broken down into smaller, semi-independent modules or "micro apps" that work together to create a single, cohesive user experience. It applies the principles of microservices to frontend development, allowing different teams to build, test, and deploy specific features (like a shopping cart or user profile) independently without affecting the rest of the application.
 
 Key Concepts and Components
@@ -902,29 +956,37 @@ The Core Roles Module Federation works by defining two main roles for your appli
 The Host: The "parent" application that requests and consumes modules from other apps.
 The Remote: The "independent" application that "exposes" its own components, functions, or pages for others to use.
 
-Key Features and Why They Matter:
-1.Dynamic Loading: Code is fetched from a remote server only when it's required. If you update a "Remote" component (like a header), every "Host" using it gets the update instantly without needing a full rebuild or redeploy.
-2.Shared Dependencies: It avoids downloading the same library twice. For example, if both your Host and Remote apps use React, the browser will only download React once and share it between them.
-3.Team Autonomy: Different teams can work on different parts of the UI using their preferred release schedules and CI/CD pipelines.
-4.Flexible Technology Stack: While often used within a single framework like React or Angular, it can technically allow components from different ecosystems to coexist in a single user experience.
+#### Key Features and Why They Matter:
+<pre>
+1. Dynamic Loading: Code is fetched from a remote server only when it's required. If you update a "Remote" component (like a header), every "Host" using it gets the update instantly without needing a full rebuild or redeploy.
+2. Shared Dependencies: It avoids downloading the same library twice. For example, if both your Host and Remote apps use React, the browser will only download React once and share it between them.
+3. Team Autonomy: Different teams can work on different parts of the UI using their preferred release schedules and CI/CD pipelines.
+4. Flexible Technology Stack: While often used within a single framework like React or Angular, it can technically allow components from different ecosystems to coexist in a single user experience.
+</pre>
 ------------------------------------------------------
-How does the web pack compiling logics?
+#### How does the web pack compiling logics?
+
 Think of Webpack like a translator and packer for your website’s code. Here is the logic in 4 simple steps:
-The Starting Line (Entry): Webpack looks at your main file (like index.js). It sees every file that the main file "imports" or "needs."
+<pre>
+1. The Starting Line (Entry): Webpack looks at your main file (like index.js). It sees every file that the main file "imports" or "needs."
 2. The Map (Dependency Graph): It follows those imports to the next files, and the next, until it has a complete map of every single image, CSS file, and script your project needs to run.
 3. The Translator (Loaders): Browsers only understand basic HTML, CSS, and JS. If you have "fancy" files (like Sass or TypeScript), Webpack uses Loaders to translate them into plain code the browser can read.
 4. The Final Package (Bundling): Webpack takes that massive pile of files, cleans out the unused parts, squashes them together, and spits out one or two small files (the "bundle") that you actually put on your server.In short: It takes a messy folder of 100 files and turns it into 1 tidy, "browser-ready" file.
+</pre>
 ------------------------------------------------------
-Why we have to follow micro front end in larger applications ? What is the advantage of that?
+
+#### Why we have to follow micro front end in larger applications ? What is the advantage of that?
 Key Features and Why They Matter:
+<pre>
 1.Dynamic Loading: Code is fetched from a remote server only when it's required. If you update a "Remote" component (like a header), every "Host" using it gets the update instantly without needing a full rebuild or redeploy.
 2.Shared Dependencies: It avoids downloading the same library twice. For example, if both your Host and Remote apps use React, the browser will only download React once and share it between them.
 3.Team Autonomy: Different teams can work on different parts of the UI using their preferred release schedules and CI/CD pipelines.
 4.Flexible Technology Stack: While often used within a single framework like React or Angular, it can technically allow components from different ecosystems to coexist in a single user experience.
+</pre>
 ------------------------------------------------------
 
 
-How to pass the data from one MF to another MF?
+#### How to pass the data from one MF to another MF?
 Passing data between microfrontends depends entirely on whether they are running on the same page simultaneously (same DOM/runtime) or if they are decoupled, cross-page apps where a page reload or route change occurs.
 
 1. When MFs Coexist on the Same Page (Same Runtime)
@@ -969,13 +1031,15 @@ const location = useLocation();
 const userId = location.state?.userId;
 ```
 
-3. Parent/Shell Orchestrator Props
+3. Parent/Shell Orchestrator Props: 
 If you are using a framework like Single-SPA or a custom host application that explicitly mounts the microfrontends, the parent application can pass down data and callback functions directly via Props or attributes, just like a standard component tree.
 TypeScriptdrive
 // Inside the Orchestrator/Host Shell
-<MicroFrontendA userToken={token} onSessionExpire={handleExpiry} />
----------------
+```typescript
+  <MicroFrontendA userToken={token} onSessionExpire={handleExpiry} />
+```
 
+---------------
 
 Windows Event listener
 In React, window event listeners are used to listen to browser-level events like:
@@ -1178,9 +1242,9 @@ Lazy loading concept - Detailed explanation with one live example
 import './App.css'
 import {lazy, Suspense} from "react";
 
+const Child = lazy(() => import("./components/Child").then(module => ({default: module.Child})))
 
 function App() {
-  const Child = lazy(() => import("./components/Child").then(module => ({default: module.Child})))
   return (
     <>
       App Component
@@ -1626,3 +1690,37 @@ function App() {
 export default App
 ```
 ------------------
+
+Events in React for Typescript:
+
+```typescript
+// Input
+React.ChangeEvent<HTMLInputElement>
+
+// Textarea
+React.ChangeEvent<HTMLTextAreaElement>
+
+// Select
+React.ChangeEvent<HTMLSelectElement>
+
+// Form submit
+React.FormEvent<HTMLFormElement>
+
+// Button click
+React.MouseEvent<HTMLButtonElement>
+
+// Div click
+React.MouseEvent<HTMLDivElement>
+
+// Keyboard
+React.KeyboardEvent<HTMLInputElement>
+
+// Focus / Blur
+React.FocusEvent<HTMLInputElement>
+
+// Paste / Copy
+React.ClipboardEvent<HTMLInputElement>
+
+// Drag & Drop
+React.DragEvent<HTMLDivElement>
+```
